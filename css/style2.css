@@ -41,3 +41,15 @@ textarea{
     margin: 50px;
     text-align: center;
 }
+.producto{
+    border: 1px solid black;
+    margin: 50px;
+    margin-left: 400px;
+    background-color: cadetblue;
+}
+.fila{
+    border: 1px solid black;
+    margin: 50px;
+    margin-left: 400px;
+    background-color: rosybrown;
+}

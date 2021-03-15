@@ -5,6 +5,8 @@ $id_atributo= $_REQUEST["id_atributo"];
 $descuento= $_REQUEST["descuento"];
 
 
+
+
 $host="localhost";
   $dbname="ecoinova_bd";
   $username="root";
@@ -15,14 +17,17 @@ $host="localhost";
    $sql="INSERT INTO allocation(id,id_producto,id_marca,id_atributo,descuento)value(NULL,'$id_producto','$id_marca','$id_atributo','$descuento');";
  //preparar  Sql sentence
    $q=$cnx->prepare($sql);
-
+   $result=$q->execute();
+   //construir sql sentence
+    $sql2="SELECT a.id,p.name as producto_name,m.name as marca_name,t.name as atributo_name,a.descuento FROM producto as p JOIN allocation a ON p.id=a.id_producto JOIN marca m ON a.id_marca=m.id JOIN atributos t ON a.id_atributo=t.id ORDER BY p.name";
+  //preparar  Sql sentence
+    $q=$cnx->prepare($sql2);
    // ejecutar sentencia
    $result=$q->execute();
-   if($result){
-     echo "la marca del producto fue guardado";
-   }else{
-    echo "hubo un error al crear el producto";
-   }
+
+   $allocation=$q->fetchAll();
+
+   
    //construir sql sentence
 $sql="select id,name from producto";
 //preparar  Sql sentence
@@ -65,9 +70,13 @@ $sql="select id,name from producto";
          <a href=""class="menu" >Marca</a>
          <!--<a href="" class="menu">Electrodomesticos</a>    -->
      </nav>  
-     
-
-   
+     <?php
+     if($result){
+     echo "la marca del producto fue guardado";
+   }else{
+    echo "hubo un error al crear el producto";
+   }
+   ?>
     <div class="contacto">
     <header >
         <h1 class="title">Marca</h1>
@@ -75,7 +84,7 @@ $sql="select id,name from producto";
     <form action="save-marca.php" method="POST">
             Producto: <br>
             <select name="id_producto" id="">
-            <option value="<?php echo $id_producto?>"><?php echo $id_producto?></option>
+            
                 <?php
                  for($i=0;$i<count($productos);$i++){
                 ?>
@@ -112,7 +121,39 @@ $sql="select id,name from producto";
            <input type="submit" value="Guardar">
         </form>
     </div>
-       
+       <table class="producto">
+        <tr>
+          <td class="producto">Nombre producto</td>
+          <td class="producto">Nombre marca</td>
+          <td class="producto">Nombre atributo</td>
+          <td class="producto">Descuento</td>
+        </tr>
+        <?php 
+     for ($i=0;$i<count($allocation);$i++){
+    ?> 
+      <tr>
+      <td class="fila">
+          <?php echo $allocation[$i]["producto_name"]?>
+      </td>
+      <td class="fila">
+      
+      <?php echo $allocation[$i]["marca_name"]?>
+      
+      
+      </td>
+      <td class="fila">
+      <?php echo $allocation[$i]["atributo_name"]?>
+      </td>
+      <td class="fila">
+      <?php echo $allocation[$i]["descuento"]?>
+      </td>
+      
+      </tr>
+    <?php
+     }
+    
+    ?>
+       </table>
     
     
     
